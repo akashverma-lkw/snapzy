@@ -1,6 +1,12 @@
 -_-  📸 Snapzy - A Social Media Platform with AI Integration
 - Snapzy is a modern social media web application built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). It allows users to create posts, like and comment on content, and experience AI-powered features through Gemini API integration. Snapzy offers an engaging user experience with features like Tic Tac Toe mini-game, image uploads, and a sleek, responsive UI.
 
+![FinSecure Banner](https://res.cloudinary.com/dsqr9jkvq/image/upload/v1751724584/snapzy-thumbnail_aku5ta.png)
+
+
+## 🖼️ Live Preview
+
+👉 [View Live Project](https://finsecure-xi.vercel.app)
 
 
 - ✨ Features
