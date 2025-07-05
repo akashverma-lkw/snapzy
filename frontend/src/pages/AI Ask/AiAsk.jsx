@@ -31,7 +31,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      const endpoint = new URL(`${API_URL}/api/ai/ask`, API_BASE_URL).toString();
+      const endpoint = new URL(`/api/ai/ask`, API_URL).toString();
 
       const res = await fetch(endpoint, {
         method: "POST",
