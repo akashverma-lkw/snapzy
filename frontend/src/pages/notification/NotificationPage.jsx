@@ -13,12 +13,15 @@ import { FaHeart } from "react-icons/fa6";
 
 const NotificationPage = () => {
 	const queryClient = useQueryClient();
+
+	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
 	const { data: notifications, isLoading } = useQuery({
 		queryKey: ["notifications"],
 		queryFn: async () => {
 			const token = localStorage.getItem("token");
 
-			const res = await fetch(`/api/notifications`, {
+			const res = await fetch(`${API_URL}/api/notifications`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -35,7 +38,7 @@ const NotificationPage = () => {
 		mutationFn: async () => {
 			const token = localStorage.getItem("token");
 
-			const res = await fetch(`/api/notifications`, {
+			const res = await fetch(`${API_URL}/api/notifications`, {
 				method: "DELETE",
 				headers: {
 					Authorization: `Bearer ${token}`,

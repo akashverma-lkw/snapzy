@@ -27,11 +27,13 @@ import Settings from "./pages/admin/dashboard/Settings";
 function App() {
     const location = useLocation();
 
+    const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
     const { data: authUser, isLoading } = useQuery({
         queryKey: ["authUser"],
         queryFn: async () => {
             try {
-                const res = await fetch(`/api/auth/me`, {
+                const res = await fetch(`${API_URL}/api/auth/me`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },

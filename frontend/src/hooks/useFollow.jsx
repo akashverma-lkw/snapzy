@@ -3,11 +3,12 @@ import toast from "react-hot-toast";
 
 const useFollow = () => {
 	const queryClient = useQueryClient();
+	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 	const { mutate: follow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await fetch(`/api/users/follow/${userId}`, {
+				const res = await fetch(`${API_URL}/api/users/follow/${userId}`, {
 					method: "POST",
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem("token")}`,

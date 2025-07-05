@@ -15,6 +15,8 @@ const CreatePost = () => {
 	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 
+	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
 	const {
 		mutate: createPost,
 		isPending,
@@ -25,7 +27,7 @@ const CreatePost = () => {
 			try {
 				const token = localStorage.getItem("token");
 
-				const res = await fetch(`/api/posts/create`, {
+				const res = await fetch(`${API_URL}/api/posts/create`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

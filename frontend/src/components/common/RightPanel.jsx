@@ -64,11 +64,13 @@ const TicTacToe = () => {
 };
 
 const RightPanel = () => {
+	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
 	const { data: suggestedUsers, isLoading } = useQuery({
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`/api/users/suggested`, {
+				const res = await fetch(`${API_URL}/api/users/suggested`, {
 					headers: {
 					 Authorization: `Bearer ${localStorage.getItem("token")}`,
 				}});

@@ -31,6 +31,8 @@ const ProfilePage = () => {
   const { follow, isPending } = useFollow();
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
+  const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
   const {
     data: user,
     isLoading,
@@ -41,7 +43,7 @@ const ProfilePage = () => {
     queryFn: async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`/api/users/profile/${username}`, {
+        const res = await fetch(`${API_URL}/api/users/profile/${username}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

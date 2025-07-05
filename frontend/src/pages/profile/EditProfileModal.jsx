@@ -22,10 +22,12 @@ const EditProfileModal = ({ authUser }) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
 	const confirmDeleteAccount = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await fetch(`/api/users/delete-account/${authUser._id}`, {
+		const res = await fetch(`${API_URL}/api/users/delete-account/${authUser._id}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${token}`,

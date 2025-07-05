@@ -25,8 +25,10 @@ const Settings = () => {
         return;
       }
 
+      const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
       // Step 1: Verify old password
-      const verifyRes = await fetch('/api/admin/verify-password', {
+      const verifyRes = await fetch(`${API_URL}/api/admin/verify-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ const Settings = () => {
       }
 
       // Step 2: Update email/password
-      const updateRes = await fetch('/api/admin/update-settings', {
+      const updateRes = await fetch(`${API_URL}/api/admin/update-settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
