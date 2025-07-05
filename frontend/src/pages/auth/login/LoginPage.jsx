@@ -15,11 +15,12 @@ const LoginPage = () => {
     password: "",
   });
 
-  // ✅ only mutationFn & onSuccess part changed
+  const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
 
 const { mutate: loginMutation, isPending, isError, error } = useMutation({
   mutationFn: async ({ username, password }) => {
-    const res = await fetch(`/api/auth/login`, {
+    const res = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
