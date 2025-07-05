@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { IoClose } from "react-icons/io5";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 const AiAskModal = ({ isOpen, onClose }) => {
   const [question, setQuestion] = useState("");
@@ -10,15 +10,14 @@ const AiAskModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Prevent background scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
-      setResponse(""); // ✅ Clear response when modal closes
-      setError(""); // ✅ Clear error when modal closes
-      setQuestion(""); // ✅ Clear input field when modal closes
+      setResponse(""); 
+      setError(""); 
+      setQuestion("");
     }
 
     return () => document.body.classList.remove("overflow-hidden");
@@ -32,7 +31,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      const endpoint = new URL("/api/ai/ask", API_BASE_URL).toString();
+      const endpoint = new URL(`${API_URL}/api/ai/ask`, API_BASE_URL).toString();
 
       const res = await fetch(endpoint, {
         method: "POST",
