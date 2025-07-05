@@ -6,7 +6,7 @@
 
 ## 🖼️ Live Preview
 
-👉 [View Live Project](https://finsecure-xi.vercel.app)
+👉 [View Live Project](https://snapzy-nu.vercel.app)
 
 
 - ✨ Features
