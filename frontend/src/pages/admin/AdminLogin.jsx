@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { MdOutlineMail, MdPassword } from "react-icons/md";
 import { IoMdLogIn } from "react-icons/io";
 
-const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });

@@ -5,9 +5,11 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch(`${API_URL}/api/admin/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ const UserList = () => {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/admin/users/delete/${userId}`, {
+      const response = await fetch(`${API_URL}/api/admin/users/delete/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
