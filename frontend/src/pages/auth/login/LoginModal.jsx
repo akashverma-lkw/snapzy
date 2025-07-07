@@ -43,12 +43,13 @@ const LoginModal = ({ isOpen, onClose }) => {
       localStorage.setItem("authUser", JSON.stringify(data.user));
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    onSuccess: (data) => {
+      queryClient.setQueryData(["authUser"], data.user); // ✅ fixes delay in navigation
       onClose();
       navigate("/homepage");
     },
   });
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,7 +64,7 @@ const LoginModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 animate-fade-in">
       <div className="bg-white/5 border border-white/10 backdrop-blur-xl text-white w-full max-w-md rounded-2xl p-8 relative shadow-2xl animate-scale-in">
-        
+
         {/* Close Button */}
         <button
           onClick={onClose}

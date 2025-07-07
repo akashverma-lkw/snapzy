@@ -37,8 +37,9 @@ const Navbar = () => {
       }
     },
     onSuccess: () => {
-      localStorage.removeItem("token"); // Optional if used
-      queryClient.removeQueries();      // Clear all cache
+      localStorage.removeItem("token"); 
+      localStorage.removeItem("authUser");
+      queryClient.removeQueries(); 
       toast.success("Logged out");
       navigate("/");
     },
