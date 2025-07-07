@@ -1,3 +1,4 @@
+// Import same as before
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { IoClose } from "react-icons/io5";
@@ -17,46 +18,53 @@ const AiAskModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [listening, setListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
   const recognitionRef = useRef(null);
 
-  // 🔊 Play notification sound
   const playSound = (src) => {
     const audio = new Audio(src);
     audio.play().catch((e) => console.warn("Audio error:", e));
   };
 
-  // Setup speech recognition
-  useEffect(() => {
-    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.continuous = false;
-      recognition.interimResults = false;
+  // Voice recognition setup
+ useEffect(() => {
+  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
-      recognition.onresult = (event) => {
-        const speech = event.results[0][0].transcript;
-        setQuestion((prev) => prev + " " + speech);
-      };
+    let finalTranscript = "";
 
-      recognition.onerror = (e) => {
-        console.error("Speech recognition error:", e);
-        setListening(false);
-      };
+    recognition.onresult = (event) => {
+      finalTranscript = event.results[0][0].transcript;
+      setQuestion((prev) => prev + " " + finalTranscript);
+    };
 
-      recognition.onend = () => {
-        setListening(false);
-        playSound("/sounds/mic-off.mp3");
-      };
+    recognition.onerror = (e) => {
+      console.error("Speech recognition error:", e);
+      setListening(false);
+    };
 
-      recognitionRef.current = recognition;
-    }
-  }, []);
+    recognition.onend = () => {
+      setListening(false);
+      playSound("/sounds/mic-off.mp3");
+      if (finalTranscript.trim() || question.trim()) {
+        handleAsk();
+      }
+    };
+
+    recognitionRef.current = recognition;
+    setVoiceSupported(true);
+  } else {
+    setVoiceSupported(false);
+  }
+}, []);
+
 
   const toggleListening = () => {
     if (!recognitionRef.current) return;
-
     if (listening) {
       recognitionRef.current.stop();
       setListening(false);
@@ -79,10 +87,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    // Save only valid entries
-    const valid = chatHistory.filter(
-      (c) => c.question?.trim() && c.response?.trim()
-    );
+    const valid = chatHistory.filter((c) => c.question?.trim() && c.response?.trim());
     localStorage.setItem("chatHistory", JSON.stringify(valid));
   }, [chatHistory]);
 
@@ -143,8 +148,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
     setIsSpeaking(false);
   };
 
-  // Call this from your logout logic
-  const clearChatHistory = () => {
+  const clearAllHistory = () => {
     localStorage.removeItem("chatHistory");
     setChatHistory([]);
   };
@@ -168,7 +172,6 @@ const AiAskModal = ({ isOpen, onClose }) => {
 
         <h2 className="text-2xl font-semibold text-center mb-4">Ask AI Anything</h2>
 
-        {/* Input */}
         <div className="relative">
           <input
             type="text"
@@ -178,7 +181,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
             placeholder="Type or speak your question..."
             className="w-full px-4 py-2 pr-12 bg-gray-800 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
           />
-          {recognitionRef.current && (
+          {voiceSupported && (
             <button
               onClick={toggleListening}
               className={`absolute right-2 top-2.5 text-lg ${listening
@@ -192,7 +195,12 @@ const AiAskModal = ({ isOpen, onClose }) => {
           )}
         </div>
 
-        {/* Ask Button */}
+        {!voiceSupported && (
+          <p className="mt-2 text-xs text-yellow-400">
+            ⚠️ Voice input not supported on this device or browser.
+          </p>
+        )}
+
         <button
           onClick={handleAsk}
           disabled={loading}
@@ -211,7 +219,6 @@ const AiAskModal = ({ isOpen, onClose }) => {
           )}
         </button>
 
-        {/* Response */}
         {(response || error) && (
           <div className="mt-4 p-4 border border-gray-700 bg-gray-800 rounded-md max-h-64 overflow-y-auto text-sm">
             {response && !loading && (
@@ -221,14 +228,19 @@ const AiAskModal = ({ isOpen, onClose }) => {
             )}
             {loading && (
               <p className="text-blue-400">
-                <Typewriter words={["Thinking... Please wait..."]} loop={1} cursor typeSpeed={60} deleteSpeed={30} />
+                <Typewriter
+                  words={["Thinking... Please wait..."]}
+                  loop={1}
+                  cursor
+                  typeSpeed={60}
+                  deleteSpeed={30}
+                />
               </p>
             )}
             {error && <p className="text-red-400">{error}</p>}
           </div>
         )}
 
-        {/* Voice Options */}
         {response && (
           <div className="mt-2 flex justify-end">
             {isSpeaking ? (
@@ -249,12 +261,19 @@ const AiAskModal = ({ isOpen, onClose }) => {
           </div>
         )}
 
-        {/* Chat History */}
         {chatHistory.length > 0 && (
           <div className="mt-6">
-            <h4 className="text-sm font-semibold text-gray-300 mb-2">
-              🕘 Previous Questions
-            </h4>
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-semibold text-gray-300">
+                🕘 Previous Questions
+              </h4>
+              <button
+                onClick={clearAllHistory}
+                className="text-xs text-red-400 hover:underline"
+              >
+                Clear All
+              </button>
+            </div>
             <div className="max-h-40 overflow-y-auto text-xs space-y-2">
               {chatHistory.map((chat, index) => (
                 <div key={index} className="border-b border-gray-700 pb-1">
