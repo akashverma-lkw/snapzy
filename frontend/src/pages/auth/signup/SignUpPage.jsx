@@ -40,7 +40,7 @@ const SignUpPage = () => {
   },
   onSuccess: () => {
     toast.success("Account created successfully");
-    navigate("/"); // or navigate("/dashboard") if needed
+    navigate("/login"); // or navigate("/dashboard") if needed
   },
 });
 

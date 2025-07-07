@@ -1,137 +1,130 @@
-import { useNavigate, Link } from "react-router-dom";
+import React from "react";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
-import { useEffect, useState } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import {
+  FaCommentDots,
+  FaUserShield,
+  FaRobot,
+  FaGamepad,
+  FaRegHeart,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const news = [
-  "Snapzy is now live with advanced AI integration.",
-  "Gemini API reshaping social content in 2025.",
-  "Tic Tac Toe Mini Game launched on Snapzy.",
-  "Sign up today and unlock premium features.",
-  "New: Image Upload & Post Engagement Features.",
-  "Ask AI — Powered by Google's Gemini API.",
-  "Like & Comment system is now available.",
-  "Snapzy: Designed for Creators & Communities.",
-  "Stay tuned: Profile Themes & More Coming Soon.",
-  "Peak user engagement achieved on Snapzy!"
+const features = [
+  {
+    icon: <FaCommentDots className="text-blue-400 text-3xl" />,
+    title: "Post & Comment",
+    desc: "Create posts, share thoughts, and chat with the community.",
+  },
+  {
+    icon: <FaRegHeart className="text-pink-400 text-3xl" />,
+    title: "Like Instantly",
+    desc: "Show appreciation with just one tap.",
+  },
+  {
+    icon: <FaRobot className="text-green-400 text-3xl" />,
+    title: "Gemini AI",
+    desc: "Smart assistant to answer your curiosities instantly.",
+  },
+  {
+    icon: <FaGamepad className="text-yellow-400 text-3xl" />,
+    title: "Play vs AI",
+    desc: "Challenge Snapzy's Tic Tac Toe AI — pure fun!",
+  },
+  {
+    icon: <FaUserShield className="text-red-400 text-3xl" />,
+    title: "Admin Control",
+    desc: "Admins maintain peace by removing inappropriate users/posts.",
+  },
 ];
 
 const FrontPage = () => {
-  const navigate = useNavigate();
-  const [currentNews, setCurrentNews] = useState(0);
-
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-    const interval = setInterval(() => {
-      setCurrentNews((prev) => (prev + 1) % news.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <>
-      <Helmet>
-        <title>Snapzy | Connect. Create. Engage.</title>
-      </Helmet>
+    <div className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1b2a] to-[#000814] text-white min-h-screen font-sans overflow-x-hidden">
 
-      <div className="flex flex-col items-center justify-center min-h-screen w-full px-6 bg-gradient-to-br from-gray-950 to-gray-950 text-white">
-        {/* Branding */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 drop-shadow-lg text-center mt-8"
-        >
-          Snapzy
-        </motion.h1>
+      {/* Hero Section */}
+      <section className="relative w-full h-screen flex flex-col justify-center items-center text-center px-6">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80')] bg-cover bg-center opacity-10"></div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="text-sm sm:text-2xl md:text-3xl font-semibold text-gray-300 mt-2"
-        >
-          The Next-Gen Social Media Platform
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="max-w-2xl text-center text-gray-400 text-lg sm:text-xl mt-4 px-4"
-        >
-          Snapzy empowers you to express, engage, and expand your digital presence. Seamlessly connect with like-minded creators, share your world, and interact through innovative features — all in one place.
-        </motion.p>
-
-        {/* News Ticker */}
-        <div
-          data-aos="fade-up"
-          className="mt-10 w-full max-w-3xl bg-gray-800/80 rounded-lg p-4 shadow-md border border-gray-700"
-        >
-          <h3 className="text-center text-lg sm:text-xl font-semibold text-blue-400 tracking-wide mb-2">
-            🔔 Platform Updates
-          </h3>
-          <div className="overflow-hidden h-10 flex items-center justify-center">
-            {news.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={index === currentNews ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
-                className={`text-sm sm:text-base text-gray-300 ${index === currentNews ? "block" : "hidden"}`}
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Hero CTA Section */}
-        <div className="mt-12 flex flex-col-reverse md:flex-row items-center justify-between w-full max-w-6xl px-4 md:px-10 gap-10">
-          {/* Left CTA */}
-          <motion.div
-            data-aos="fade-right"
-            className="md:w-1/2 space-y-6 text-left"
+        <div className="z-10">
+          <motion.h1
+            className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 drop-shadow-lg"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
           >
-            <h2 className="text-xl sm:text-3xl font-bold text-white">
-              Join a community built for creators & conversations
-            </h2>
-            <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
-              Whether you’re an artist, influencer, or innovator — Snapzy offers tools designed to elevate your voice. Your platform. Your pace.
-            </p>
+            Snapzy – Your Social Hub
+          </motion.h1>
+          <motion.p
+            className="text-lg md:text-xl text-gray-300 mt-6 max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 1 }}
+          >
+            Dive into a vibrant world where you connect, share, play, and interact — powered by AI.
+          </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <button
-                onClick={() => navigate("/login")}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"
-              >
-                Get Started
+          {/* Mini Features Row */}
+          <motion.div
+            className="mt-10 flex justify-center gap-6 flex-wrap cursor-pointer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.6 }}
+          >
+            <span className="flex items-center gap-2 bg-[#1e2a45] px-4 py-2 rounded-full text-sm text-gray-300">
+              <FaCommentDots className="text-blue-400" /> Social Sharing
+            </span>
+            <span className="flex items-center gap-2 bg-[#1e2a45] px-4 py-2 rounded-full text-sm text-gray-300">
+              <FaRobot className="text-green-400" /> Ask Gemini AI
+            </span>
+            <span className="flex items-center gap-2 bg-[#1e2a45] px-4 py-2 rounded-full text-sm text-gray-300">
+              <FaGamepad className="text-yellow-400" /> Mini Games
+            </span>
+          </motion.div>
+
+          {/* Login / Register Buttons */}
+          <motion.div
+            className="mt-10 flex justify-center gap-6 flex-wrap"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            <Link to="/login">
+              <button className="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white font-semibold shadow-md hover:scale-105">
+                Already have an account? Login
               </button>
-              <Link
-                to="/signup"
-                className="text-blue-400 hover:underline text-sm mt-2 sm:mt-3"
-              >
-                New here? Create your account
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Right Image */}
-          <motion.div
-            data-aos="fade-left"
-            className="hidden lg:flex lg:w-1/2 justify-center"
-          >
-            <img
-              src="https://unmistakablecreative.com/wp-content/uploads/2023/09/image-5.png"
-              alt="Snapzy Interface"
-              className="rounded-xl shadow-xl h-64 md:h-80 object-cover"
-            />
+            </Link>
+            <Link to="/signup">
+              <button className="px-6 py-3 rounded-full border border-gray-400 hover:border-white transition-all duration-300 text-white font-semibold shadow-md hover:scale-105">
+                New here? Sign Up
+              </button>
+            </Link>
           </motion.div>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* Features */}
+      <section className="px-6 md:px-16 py-16 bg-[#0f1e34] rounded-t-3xl shadow-inner">
+        <h2 className="text-3xl font-bold text-center mb-12">Why You'll Love Snapzy 💙</h2>
+        <div className="grid md:grid-cols-3 gap-10 cursor-pointer">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.05 }}
+              className="bg-[#112240] bg-opacity-60 p-6 rounded-2xl shadow-lg transition-all duration-300 backdrop-blur-md"
+            >
+              <div className="mb-4">{feature.icon}</div>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-400">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-[#010409] py-8 text-center text-gray-500 text-sm mt-20">
+        Made with ❤️ by Akash Verma · © {new Date().getFullYear()} Snapzy
+      </footer>
+    </div>
   );
 };
 
