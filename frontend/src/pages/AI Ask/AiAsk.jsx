@@ -15,8 +15,8 @@ const AiAskModal = ({ isOpen, onClose }) => {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
-      setResponse(""); 
-      setError(""); 
+      setResponse("");
+      setError("");
       setQuestion("");
     }
 
@@ -49,6 +49,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
 
       const data = await res.json();
       setResponse(data?.response || "Sorry, I couldn't process your question.");
+      setQuestion(""); // Clear input after successful submission
     } catch (err) {
       console.error("Error fetching AI response:", err);
       setError("An error occurred while fetching the response.");
@@ -60,50 +61,57 @@ const AiAskModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 px-4">
       <motion.div
-        initial={{ y: -50, opacity: 0 }}
+        initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        className="bg-gray-900 w-[90%] max-w-lg p-6 rounded-lg shadow-lg relative max-h-[80vh] flex flex-col"
+        transition={{ duration: 0.3 }}
+        className="bg-[#111827] w-full max-w-xl rounded-xl shadow-lg p-6 relative"
       >
         {/* Close Button */}
         <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-white"
+          className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition"
           onClick={onClose}
+          aria-label="Close"
         >
-          <IoClose size={24} />
+          <IoClose size={22} />
         </button>
 
-        {/* Modal Title */}
-        <h2 className="text-xl font-bold mb-4 text-white text-center">Ask AI</h2>
+        {/* Modal Heading */}
+        <h2 className="text-2xl font-semibold text-center text-white mb-4">Ask AI Anything</h2>
 
         {/* Input Field */}
         <input
           type="text"
-          placeholder="Ask your question..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleAsk();
-            }
-          }}
-          className="w-full border border-gray-600 bg-gray-800 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          autoFocus
+          onKeyDown={(e) => e.key === "Enter" && handleAsk()}
+          placeholder="Type your question here..."
+          className="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
-        {/* Submit Button */}
+        {/* Ask Button */}
         <button
-          className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center"
           onClick={handleAsk}
           disabled={loading}
+          className="mt-4 w-full py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center justify-center transition"
         >
           {loading ? (
             <>
-              <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
               </svg>
               Thinking...
             </>
@@ -112,9 +120,9 @@ const AiAskModal = ({ isOpen, onClose }) => {
           )}
         </button>
 
-        {/* Scrollable Response Section */}
+        {/* Response/Error Section */}
         {(response || error) && (
-          <div className="mt-4 p-3 border border-gray-700 bg-gray-800 text-gray-300 rounded-md max-h-48 overflow-y-auto">
+          <div className="mt-4 p-4 border border-gray-600 rounded-md bg-gray-800 max-h-60 overflow-y-auto text-sm text-gray-200">
             {response && <p>{response}</p>}
             {error && <p className="text-red-400">{error}</p>}
           </div>
