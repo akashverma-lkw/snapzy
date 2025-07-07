@@ -7,7 +7,6 @@ import {
   FaGamepad,
   FaRegHeart,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 const features = [
   {
@@ -37,10 +36,9 @@ const features = [
   },
 ];
 
-const FrontPage = () => {
+const FrontPage = ({ openLoginModal, openSignupModal }) => {
   return (
     <div className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1b2a] to-[#000814] text-white min-h-screen font-sans overflow-x-hidden">
-
       {/* Hero Section */}
       <section className="relative w-full h-screen flex flex-col justify-center items-center text-center px-6">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80')] bg-cover bg-center opacity-10"></div>
@@ -63,9 +61,9 @@ const FrontPage = () => {
             Dive into a vibrant world where you connect, share, play, and interact — powered by AI.
           </motion.p>
 
-          {/* Mini Features Row */}
+          {/* Mini Feature Tags */}
           <motion.div
-            className="mt-10 flex justify-center gap-6 flex-wrap cursor-pointer"
+            className="mt-10 flex justify-center gap-6 flex-wrap"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
@@ -81,28 +79,30 @@ const FrontPage = () => {
             </span>
           </motion.div>
 
-          {/* Login / Register Buttons */}
+          {/* Auth Buttons */}
           <motion.div
             className="mt-10 flex justify-center gap-6 flex-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
           >
-            <Link to="/login">
-              <button className="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white font-semibold shadow-md hover:scale-105">
-                Already have an account? Login
-              </button>
-            </Link>
-            <Link to="/signup">
-              <button className="px-6 py-3 rounded-full border border-gray-400 hover:border-white transition-all duration-300 text-white font-semibold shadow-md hover:scale-105">
-                New here? Sign Up
-              </button>
-            </Link>
+            <button
+              onClick={openLoginModal}
+              className="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white font-semibold shadow-md hover:scale-105"
+            >
+              Already have an account? Login
+            </button>
+            <button
+              onClick={openSignupModal}
+              className="px-6 py-3 rounded-full border border-gray-400 hover:border-white transition-all duration-300 text-white font-semibold shadow-md hover:scale-105"
+            >
+              New here? Sign Up
+            </button>
           </motion.div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* Feature Grid */}
       <section className="px-6 md:px-16 py-16 bg-[#0f1e34] rounded-t-3xl shadow-inner">
         <h2 className="text-3xl font-bold text-center mb-12">Why You'll Love Snapzy 💙</h2>
         <div className="grid md:grid-cols-3 gap-10 cursor-pointer">
