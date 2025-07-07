@@ -27,41 +27,36 @@ const AiAskModal = ({ isOpen, onClose }) => {
   };
 
   // Voice recognition setup
- useEffect(() => {
-  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.continuous = false;
-    recognition.interimResults = false;
+  useEffect(() => {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
 
-    let finalTranscript = "";
+      recognition.onresult = (event) => {
+        const speech = event.results[0][0].transcript;
+        setQuestion((prev) => prev + " " + speech);
+      };
 
-    recognition.onresult = (event) => {
-      finalTranscript = event.results[0][0].transcript;
-      setQuestion((prev) => prev + " " + finalTranscript);
-    };
+      recognition.onerror = (e) => {
+        console.error("Speech recognition error:", e);
+        setListening(false);
+      };
 
-    recognition.onerror = (e) => {
-      console.error("Speech recognition error:", e);
-      setListening(false);
-    };
+      recognition.onend = () => {
+        setListening(false);
+        playSound("/sounds/mic-off.mp3");
+      };
 
-    recognition.onend = () => {
-      setListening(false);
-      playSound("/sounds/mic-off.mp3");
-      if (finalTranscript.trim() || question.trim()) {
-        handleAsk();
-      }
-    };
-
-    recognitionRef.current = recognition;
-    setVoiceSupported(true);
-  } else {
-    setVoiceSupported(false);
-  }
-}, []);
-
+      recognitionRef.current = recognition;
+      setVoiceSupported(true);
+    } else {
+      setVoiceSupported(false);
+    }
+  }, []);
 
   const toggleListening = () => {
     if (!recognitionRef.current) return;
@@ -187,7 +182,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
               className={`absolute right-2 top-2.5 text-lg ${listening
                 ? "text-red-400 animate-pulse"
                 : "text-gray-400 hover:text-blue-400"
-                }`}
+              }`}
               title={listening ? "Listening..." : "Start Voice Input"}
             >
               {listening ? <FaMicrophoneSlash /> : <FaMicrophone />}
