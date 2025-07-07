@@ -1,27 +1,97 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { IoClose } from "react-icons/io5";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
+import { Typewriter } from "react-simple-typewriter";
 
 const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 const AiAskModal = ({ isOpen, onClose }) => {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
+  const [chatHistory, setChatHistory] = useState(() =>
+    JSON.parse(localStorage.getItem("chatHistory") || "[]")
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
+
+  // 🔊 Play notification sound
+  const playSound = (src) => {
+    const audio = new Audio(src);
+    audio.play().catch((e) => console.warn("Audio error:", e));
+  };
+
+  // Setup speech recognition
+  useEffect(() => {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const speech = event.results[0][0].transcript;
+        setQuestion((prev) => prev + " " + speech);
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Speech recognition error:", e);
+        setListening(false);
+      };
+
+      recognition.onend = () => {
+        setListening(false);
+        playSound("/sounds/mic-off.mp3");
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+
+    if (listening) {
+      recognitionRef.current.stop();
+      setListening(false);
+      playSound("/sounds/mic-off.mp3");
+    } else {
+      recognitionRef.current.start();
+      setListening(true);
+      playSound("/sounds/mic-on.mp3");
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
-      setResponse("");
-      setError("");
-      setQuestion("");
+      resetState();
     }
-
     return () => document.body.classList.remove("overflow-hidden");
   }, [isOpen]);
+
+  useEffect(() => {
+    // Save only valid entries
+    const valid = chatHistory.filter(
+      (c) => c.question?.trim() && c.response?.trim()
+    );
+    localStorage.setItem("chatHistory", JSON.stringify(valid));
+  }, [chatHistory]);
+
+  const resetState = () => {
+    setQuestion("");
+    setResponse("");
+    setError("");
+    stopSpeech();
+  };
 
   const handleAsk = async () => {
     if (!question.trim()) return;
@@ -29,10 +99,10 @@ const AiAskModal = ({ isOpen, onClose }) => {
     setLoading(true);
     setResponse("");
     setError("");
+    stopSpeech();
 
     try {
-      const endpoint = new URL(`/api/ai/ask`, API_URL).toString();
-
+      const endpoint = new URL("/api/ai/ask", API_URL).toString();
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,78 +110,99 @@ const AiAskModal = ({ isOpen, onClose }) => {
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error(`HTTP Error! Status: ${res.status}`);
-
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Invalid response format.");
-      }
+      if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
 
       const data = await res.json();
-      setResponse(data?.response || "Sorry, I couldn't process your question.");
-      setQuestion(""); // Clear input after successful submission
+      const answer = data?.response || "Sorry, I couldn't process that.";
+      setResponse(answer);
+      setChatHistory((prev) => [...prev, { question, response: answer }]);
+      setQuestion("");
+      speakText(answer);
     } catch (err) {
-      console.error("Error fetching AI response:", err);
-      setError("An error occurred while fetching the response.");
+      console.error(err);
+      setError("Something went wrong while fetching the response.");
     }
 
     setLoading(false);
   };
 
+  const speakText = (text) => {
+    if (!window.speechSynthesis) return;
+    stopSpeech();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+  };
+
+  const stopSpeech = () => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  };
+
+  // Call this from your logout logic
+  const clearChatHistory = () => {
+    localStorage.removeItem("chatHistory");
+    setChatHistory([]);
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 px-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50 px-4 backdrop-blur-sm">
       <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-[#111827] w-full max-w-xl rounded-xl shadow-lg p-6 relative"
+        className="bg-gray-900 text-white w-full max-w-xl rounded-xl shadow-lg p-6 relative"
       >
-        {/* Close Button */}
         <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition"
           onClick={onClose}
-          aria-label="Close"
+          className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
         >
           <IoClose size={22} />
         </button>
 
-        {/* Modal Heading */}
-        <h2 className="text-2xl font-semibold text-center text-white mb-4">Ask AI Anything</h2>
+        <h2 className="text-2xl font-semibold text-center mb-4">Ask AI Anything</h2>
 
-        {/* Input Field */}
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleAsk()}
-          placeholder="Type your question here..."
-          className="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {/* Input */}
+        <div className="relative">
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAsk()}
+            placeholder="Type or speak your question..."
+            className="w-full px-4 py-2 pr-12 bg-gray-800 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          {recognitionRef.current && (
+            <button
+              onClick={toggleListening}
+              className={`absolute right-2 top-2.5 text-lg ${listening
+                ? "text-red-400 animate-pulse"
+                : "text-gray-400 hover:text-blue-400"
+                }`}
+              title={listening ? "Listening..." : "Start Voice Input"}
+            >
+              {listening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+            </button>
+          )}
+        </div>
 
         {/* Ask Button */}
         <button
           onClick={handleAsk}
           disabled={loading}
-          className="mt-4 w-full py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center justify-center transition"
+          className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-md transition flex justify-center items-center"
         >
           {loading ? (
             <>
-              <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                ></path>
+              <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
+                <path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" className="opacity-75" />
               </svg>
               Thinking...
             </>
@@ -120,11 +211,58 @@ const AiAskModal = ({ isOpen, onClose }) => {
           )}
         </button>
 
-        {/* Response/Error Section */}
+        {/* Response */}
         {(response || error) && (
-          <div className="mt-4 p-4 border border-gray-600 rounded-md bg-gray-800 max-h-60 overflow-y-auto text-sm text-gray-200">
-            {response && <p>{response}</p>}
+          <div className="mt-4 p-4 border border-gray-700 bg-gray-800 rounded-md max-h-64 overflow-y-auto text-sm">
+            {response && !loading && (
+              <div className="prose prose-invert prose-sm">
+                <ReactMarkdown>{response}</ReactMarkdown>
+              </div>
+            )}
+            {loading && (
+              <p className="text-blue-400">
+                <Typewriter words={["Thinking... Please wait..."]} loop={1} cursor typeSpeed={60} deleteSpeed={30} />
+              </p>
+            )}
             {error && <p className="text-red-400">{error}</p>}
+          </div>
+        )}
+
+        {/* Voice Options */}
+        {response && (
+          <div className="mt-2 flex justify-end">
+            {isSpeaking ? (
+              <button
+                onClick={stopSpeech}
+                className="text-sm text-red-500 underline hover:text-red-400"
+              >
+                Stop Voice
+              </button>
+            ) : (
+              <button
+                onClick={() => speakText(response)}
+                className="text-sm text-green-400 underline hover:text-green-300"
+              >
+                🔊 Speak Again
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Chat History */}
+        {chatHistory.length > 0 && (
+          <div className="mt-6">
+            <h4 className="text-sm font-semibold text-gray-300 mb-2">
+              🕘 Previous Questions
+            </h4>
+            <div className="max-h-40 overflow-y-auto text-xs space-y-2">
+              {chatHistory.map((chat, index) => (
+                <div key={index} className="border-b border-gray-700 pb-1">
+                  <p><strong>You:</strong> {chat.question}</p>
+                  <p><strong>AI:</strong> {chat.response}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </motion.div>
