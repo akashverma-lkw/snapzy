@@ -19,7 +19,7 @@ const sendWelcomeMail = async (to, name) => {
           <h1 style="margin: 0; color: white; font-size: 24px;">Welcome to Snapzy 🎉</h1>
         </div>
         <div style="padding: 30px;">
-          <p style="font-size: 16px;">Hi <strong>${name}</strong>,</p>
+          <p style="font-size: 16px;">Hi <strong>${name || "there"}</strong>,</p>
           <p style="margin: 16px 0; font-size: 15px;">
             We're thrilled to have you join <strong>Snapzy</strong> — your social space to connect, share, play, and explore with AI!
           </p>
