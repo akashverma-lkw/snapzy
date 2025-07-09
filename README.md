@@ -85,7 +85,7 @@ npm start
 
 ---
 
-## 💌 Contact
+### 💌 Contact
 
 **Akash Verma**  
 📧 [akashvermastp7@gmail.com](mailto:akashvermastp7@gmail.com)  
@@ -94,6 +94,6 @@ npm start
 
 ---
 
-## 📜 License
+### 📜 License
 
 This project is licensed under the **MIT License**.
