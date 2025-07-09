@@ -1,73 +1,99 @@
--_-  📸 Snapzy - A Social Media Platform with AI Integration
-- Snapzy is a modern social media web application built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). It allows users to create posts, like and comment on content, and experience AI-powered features through Gemini API integration. Snapzy offers an engaging user experience with features like Tic Tac Toe mini-game, image uploads, and a sleek, responsive UI.
+# 📸 Snapzy — A Social Media Platform with AI Integration
 
-![FinSecure Banner](https://res.cloudinary.com/dsqr9jkvq/image/upload/v1751724584/snapzy-thumbnail_aku5ta.png)
+![License](https://img.shields.io/github/license/akashverma-lkw/snapzy?style=flat-square)
+![Tech](https://img.shields.io/badge/Stack-MERN-blue?style=flat-square)
+![Status](https://img.shields.io/badge/Live-Online-success?style=flat-square)
 
+**Snapzy** is a modern and engaging social media web application built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). It enables users to create posts, like, comment, and interact with content. The platform features AI integration via the **Gemini API**, offering unique user experiences including an AI-powered Q&A assistant, a Tic Tac Toe mini-game, and more.
 
-## 🖼️ Live Preview
+![Snapzy Thumbnail](https://res.cloudinary.com/dsqr9jkvq/image/upload/v1751724584/snapzy-thumbnail_aku5ta.png)
 
-👉 [View Live Project](https://snapzy-nu.vercel.app)
+---
 
+## 🔗 Live Preview
 
-- ✨ Features
-📝 Create & Share Posts
-❤️ Like & Comment on Posts
-🧠 Ask AI (Gemini API Integration)
-🕹️ Tic Tac Toe Mini Game (User vs AI)
-🖼️ Image Upload Feature
-👤 User Profile Customization
-🔒 Authentication (Register / Login)
-📨 Welcome Emails on Signup
-📊 Admin Panel (Manage Users & Posts)
-📱 Responsive Design for All Devices
+👉 [**View Live Project**](https://snapzy-nu.vercel.app)
 
+---
 
+## ✨ Features
 
-- 🛠️ Tech Stack
+- 📝 Create and Share Posts  
+- ❤️ Like and Comment Functionality  
+- 🧠 Ask AI (Gemini API Integration)  
+- 🕹️ Tic Tac Toe Mini Game (User vs AI)  
+- 🖼️ Image Upload Support  
+- 👤 User Profile Customization  
+- 🔒 Authentication (Register / Login)  
+- 📨 Welcome Emails on Signup  
+- 📊 Admin Panel to Manage Users & Posts  
+- 📱 Fully Responsive Design for All Devices  
 
-- Frontend
-React.js
-Tailwind CSS
-Framer Motion (Animations)
-React Icons
-Fetch API (For Backend Communication)
+---
 
+## 📌 Future Enhancements
 
-- Backend
-Node.js
-Express.js
-MongoDB (Mongoose ODM)
-JWT Authentication
-Nodemailer (Email Functionality)
+- 🔔 Real-time Notifications (Socket.io)  
+- 💬 Chat / Messaging System  
+- 🌐 Multi-language Support  
+- 📱 Mobile App (using React Native)  
+- 🛡️ Role-Based Access Control  
+- 📢 Admin Announcements System
 
+---
 
+## 🛠️ Tech Stack
 
-- ⚙️ Installation & Setup Guide
-Prerequisites
-Node.js and npm
-MongoDB
-Git
+### 🔹 Frontend
+- React.js  
+- Tailwind CSS  
+- Framer Motion (Animations)  
+- React Icons  
+- Fetch API (for API communication)
 
+### 🔹 Backend
+- Node.js  
+- Express.js  
+- MongoDB (with Mongoose ODM)  
+- JWT Authentication  
+- Nodemailer (Email Service)
 
+---
 
-- 📝 Future Enhancements
-🔔 Real-time Notifications (Socket.io)
-💬 Chat / Messaging Feature
-🌐 Multi-language Support
-📱 Mobile App (React Native)
-🛡️ Role-based Access Control
-📢 Announcements System for Admins
+## ⚙️ Installation & Setup Guide
 
+### ✅ Prerequisites
+- Node.js & npm  
+- MongoDB  
+- Git  
 
+### 🚀 Getting Started
 
-- 💌 Contact
-Akash Verma
-📧 [akashvermastp7@gmail.com]
-🔗 LinkedIn[www.linkedin.com/in/akash-verma-664b071a1]
-🔗 Instagram[]
+```bash
+# Clone the repository
+git clone https://github.com/akashverma-lkw/snapzy.git
 
+# Navigate into the project directory
+cd snapzy
 
+# Install dependencies
+npm install
 
-- 📜 License
-This project is licensed under the MIT License.
+# Set up your environment variables in a `.env` file
+# Start the backend and frontend
+npm start
 
+---
+
+## 💌 Contact
+
+**Akash Verma**  
+📧 [akashvermastp7@gmail.com](mailto:akashvermastp7@gmail.com)  
+🔗 [LinkedIn](https://www.linkedin.com/in/akash-verma-664b071a1)  
+🔗 [Instagram](#)
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
