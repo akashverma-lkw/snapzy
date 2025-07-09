@@ -1,3 +1,4 @@
+
 # 📸 Snapzy — A Social Media Platform with AI Integration
 
 ![License](https://img.shields.io/github/license/akashverma-lkw/snapzy?style=flat-square)
@@ -38,7 +39,7 @@
 - 🌐 Multi-language Support  
 - 📱 Mobile App (using React Native)  
 - 🛡️ Role-Based Access Control  
-- 📢 Admin Announcements System
+- 📢 Admin Announcements System  
 
 ---
 
@@ -80,20 +81,21 @@ cd snapzy
 npm install
 
 # Set up your environment variables in a `.env` file
-# Start the backend and frontend
+
+# Start the development server
 npm start
+```
 
 ---
 
-### 💌 Contact
+## 💌 Contact
 
 **Akash Verma**  
 📧 [akashvermastp7@gmail.com](mailto:akashvermastp7@gmail.com)  
-🔗 [LinkedIn](https://www.linkedin.com/in/akash-verma-664b071a1)  
-🔗 [Instagram](#)
+🔗 [LinkedIn](https://www.linkedin.com/in/akashstack)  
 
 ---
 
-### 📜 License
+## 📜 License
 
 This project is licensed under the **MIT License**.
