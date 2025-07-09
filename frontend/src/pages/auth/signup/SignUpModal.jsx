@@ -21,7 +21,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
     password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false); // 👁️ Password visibility state
+  const [showPassword, setShowPassword] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -44,16 +44,16 @@ const SignUpModal = ({ isOpen, onClose }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create account");
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("authUser", JSON.stringify(data.user));
-
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Account created successfully!");
+    onSuccess: (data) => {
+      toast.success("OTP sent to your email!");
       onClose();
-      navigate("/"); // stay on front page after signup
+      navigate("/verify-otp", {
+        state: {
+          email: formData.email,
+        },
+      });
     },
   });
 
@@ -127,7 +127,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
             </label>
           </div>
 
-          {/* Password with Eye Toggle */}
+          {/* Password */}
           <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
             <MdPassword className="text-2xl text-indigo-300" />
             <input
@@ -149,7 +149,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
             </button>
           </label>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={isPending}

@@ -7,7 +7,6 @@ const EditProfileModal = ({ authUser }) => {
 	const [formData, setFormData] = useState({
 		fullName: "",
 		username: "",
-		email: "",
 		bio: "",
 		link: "",
 		newPassword: "",
@@ -55,7 +54,6 @@ const EditProfileModal = ({ authUser }) => {
 			setFormData({
 				fullName: authUser.fullName,
 				username: authUser.username,
-				email: authUser.email,
 				bio: authUser.bio,
 				link: authUser.link,
 				newPassword: "",
@@ -110,14 +108,6 @@ const EditProfileModal = ({ authUser }) => {
 						</div>
 
 						<div className='flex flex-col gap-2'>
-							<input
-								type='email'
-								placeholder='Email'
-								className='input border border-gray-700 rounded p-2 input-md w-full'
-								value={formData.email}
-								name='email'
-								onChange={handleInputChange}
-							/>
 							<textarea
 								placeholder='Bio'
 								className='input border border-gray-700 rounded p-2 input-md w-full'

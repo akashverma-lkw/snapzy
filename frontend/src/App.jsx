@@ -3,8 +3,11 @@ import { useState } from "react";
 import { HelmetProvider } from "react-helmet-async";
 
 import HomePage from "./pages/home/HomePage";
+
 import LoginModal from "./pages/auth/login/LoginModal";
 import SignUpModal from "./pages/auth/signup/SignUpModal";
+import VerifyOtp from "./pages/auth/verify/VerifyOtp";
+
 import NotificationPage from "./pages/notification/NotificationPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import FrontPage from "./pages/FrontPage/FrontPage";
@@ -84,10 +87,10 @@ function App() {
           />
 
           {/* Protected User Routes */}
-          <Route
-            path="/homepage" element={authUser ? <HomePage /> : <Navigate to="/" />}/>
+          <Route path="/homepage" element={authUser ? <HomePage /> : <Navigate to="/" />}/>
           <Route path="/notifications" element={authUser ? <NotificationPage /> : <Navigate to="/" />}/>
           <Route path="/profile/:username" element={authUser ? <ProfilePage /> : <Navigate to="/" />}/>
+          <Route path="/verify-otp" element={<VerifyOtp />} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
