@@ -91,7 +91,7 @@ npm start
 ## 💌 Contact
 
 **Akash Verma**  
-📧 [akashvermastp7@gmail.com](mailto:akashvermastp7@gmail.com)  
+📧 [Mail](mailto:akashvermastp7@gmail.com)  
 🔗 [LinkedIn](https://www.linkedin.com/in/akashstack)  
 
 ---
