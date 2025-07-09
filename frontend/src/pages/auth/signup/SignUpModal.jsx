@@ -102,7 +102,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
     onSuccess: () => {
       toast.success("Account created successfully!");
       onClose();
-      navigate("/", { state: { email: formData.email } });
+      navigate("/");
     },
     onError: (err) => toast.error(err.message),
   });
