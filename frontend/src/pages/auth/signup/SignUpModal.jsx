@@ -200,6 +200,35 @@ const SignUpModal = ({ isOpen, onClose }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Username & Full Name */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <label className="flex items-center gap-3 flex-1 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
+              <MdDriveFileRenameOutline className="text-xl text-indigo-300" />
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="Full Name"
+                className="w-full bg-transparent outline-none text-white placeholder-gray-300"
+                required
+              />
+            </label>
+
+            <label className="flex items-center gap-3 flex-1 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
+              <FaUser className="text-xl text-indigo-300" />
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                placeholder="Username"
+                className="w-full bg-transparent outline-none text-white placeholder-gray-300"
+                required
+              />
+            </label>
+          </div>
+
           {/* Email */}
           <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
             <MdOutlineMail className="text-2xl text-indigo-300" />
@@ -212,6 +241,27 @@ const SignUpModal = ({ isOpen, onClose }) => {
               className="w-full bg-transparent outline-none text-white placeholder-gray-300"
               required
             />
+          </label>
+
+          {/* Password */}
+          <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
+            <MdPassword className="text-2xl text-indigo-300" />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Password"
+              className="w-full bg-transparent outline-none text-white placeholder-gray-300"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-indigo-300 hover:text-indigo-400"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </label>
 
           {/* OTP Inputs */}
@@ -245,63 +295,6 @@ const SignUpModal = ({ isOpen, onClose }) => {
               </div>
             </div>
           )}
-
-          {/* Verified Status */}
-          {emailVerified && (
-            <p className="text-green-400 text-sm font-medium px-2">
-              ✅ Email Verified
-            </p>
-          )}
-
-          {/* Username & Full Name */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <label className="flex items-center gap-3 flex-1 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
-              <FaUser className="text-xl text-indigo-300" />
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                placeholder="Username"
-                className="w-full bg-transparent outline-none text-white placeholder-gray-300"
-                required
-              />
-            </label>
-
-            <label className="flex items-center gap-3 flex-1 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
-              <MdDriveFileRenameOutline className="text-xl text-indigo-300" />
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                placeholder="Full Name"
-                className="w-full bg-transparent outline-none text-white placeholder-gray-300"
-                required
-              />
-            </label>
-          </div>
-
-          {/* Password */}
-          <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600">
-            <MdPassword className="text-2xl text-indigo-300" />
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Password"
-              className="w-full bg-transparent outline-none text-white placeholder-gray-300"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-indigo-300 hover:text-indigo-400"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-          </label>
 
           {/* Submit Button */}
           <button
