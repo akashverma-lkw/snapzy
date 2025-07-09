@@ -122,7 +122,7 @@ const FrontPage = ({ openLoginModal, openSignupModal }) => {
 
       {/* Footer */}
       <footer className="bg-[#010409] py-8 text-center text-gray-500 text-sm mt-20">
-        Made with ❤️ by Akash Verma · © {new Date().getFullYear()} Snapzy
+        Madeby Akash Verma · © {new Date().getFullYear()} Snapzy
       </footer>
     </div>
   );

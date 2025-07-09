@@ -26,6 +26,7 @@ const AiAskModal = ({ isOpen, onClose }) => {
     audio.play().catch((e) => console.warn("Audio error:", e));
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
     return () => {
@@ -33,6 +34,8 @@ const AiAskModal = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
+=======
+>>>>>>> 07cb2ad (Reinitialized project)
   // Voice recognition setup
   useEffect(() => {
     if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
