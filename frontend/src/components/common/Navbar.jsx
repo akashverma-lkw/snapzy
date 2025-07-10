@@ -37,9 +37,9 @@ const Navbar = () => {
       }
     },
     onSuccess: () => {
-      localStorage.removeItem("token"); 
+      localStorage.removeItem("token");
       localStorage.removeItem("authUser");
-      queryClient.removeQueries(); 
+      queryClient.removeQueries();
       toast.success("Logged out");
       navigate("/");
     },
@@ -116,26 +116,40 @@ const Navbar = () => {
       <AiAskModal isOpen={isAiModalOpen} onClose={() => setIsAiModalOpen(false)} />
 
       {/* Mobile Menu Icon */}
-      <motion.button
-        className="md:hidden text-white text-2xl"
-        onClick={() => setMenuOpen(!menuOpen)}
-        animate={{
-          rotate: menuOpen ? 90 : 0,
-          scale: menuOpen ? 1.3 : 1,
-          color: menuOpen ? "#FACC15" : "#FFFFFF", // yellow-400 on open
-        }}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 30,
-        }}
+      <button
+        className="md:hidden z-50 flex items-center justify-center w-10 h-10 focus:outline-none"
+        onClick={() => setMenuOpen((prev) => !prev)}
+        aria-label="Toggle menu"
       >
-        <button className="md:hidden text-white text-2xl" onClick={() => setMenuOpen(!menuOpen)}>
-          <RxHamburgerMenu />
-        </button>
-      </motion.button>
+        <svg
+          viewBox="0 0 100 100"
+          width="30"
+          height="30"
+          className="stroke-white"
+        >
+          <motion.path
+            strokeWidth="6"
+            strokeLinecap="round"
+            d="M 20 30 H 80"
+            animate={menuOpen ? { d: "M 30 30 L 70 70" } : { d: "M 20 30 H 80" }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.path
+            strokeWidth="6"
+            strokeLinecap="round"
+            d="M 20 50 H 80"
+            animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.path
+            strokeWidth="6"
+            strokeLinecap="round"
+            d="M 20 70 H 80"
+            animate={menuOpen ? { d: "M 30 70 L 70 30" } : { d: "M 20 70 H 80" }}
+            transition={{ duration: 0.3 }}
+          />
+        </svg>
+      </button>
 
       {/* Mobile Menu (Toggle) */}
       {menuOpen && (

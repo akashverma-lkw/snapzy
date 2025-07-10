@@ -25,7 +25,8 @@
     "react-simple-typewriter": "^5.0.1",
     "react-speech-recognition": "^4.0.1",
     "remark-gfm": "^4.0.1",
-    "snapzy": "file:.."
+    "snapzy": "file:..",
+    "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
