@@ -40,7 +40,7 @@ const FrontPage = ({ openLoginModal, openSignupModal }) => {
   return (
     <div className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1b2a] to-[#000814] text-white min-h-screen font-sans overflow-x-hidden">
       {/* Notification Bar */}
-      <div className="w-full bg-white/5 backdrop-blur-md text-center py-3 px-4 border-b border-white/10 shadow-sm z-50">
+      <div className="w-full bg-white/5 backdrop-blur-md text-center py-3 px-4 border-b border-white/10 shadow-sm z-50 fixed">
         <p className="text-sm sm:text-base text-gray-200 font-medium tracking-wide">
           Your story matters — share it with the world on <span className='text-sky-400 font-semibold'>Snapzy</span>!
         </p>
