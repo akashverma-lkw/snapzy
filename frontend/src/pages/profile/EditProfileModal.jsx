@@ -24,29 +24,29 @@ const EditProfileModal = ({ authUser }) => {
 	const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 	const confirmDeleteAccount = async () => {
-	try {
-		const token = localStorage.getItem("token");
-		const res = await fetch(`${API_URL}/api/users/delete-account/${authUser._id}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-			credentials: "include",
-		});
+		try {
+			const token = localStorage.getItem("token");
+			const res = await fetch(`${API_URL}/api/users/delete-account/${authUser._id}`, {
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				credentials: "include",
+			});
 
-		const data = await res.json();
-		if (res.ok) {
-			toast.success("Account deleted successfully");
-			localStorage.removeItem("token");
-			navigate("/");
-			window.location.reload();
-		} else {
-			toast.error(data.message || "Failed to delete account");
+			const data = await res.json();
+			if (res.ok) {
+				toast.success("Account deleted successfully");
+				localStorage.removeItem("token");
+				navigate("/");
+				window.location.reload();
+			} else {
+				toast.error(data.message || "Failed to delete account");
+			}
+		} catch (error) {
+			toast.error("Something went wrong");
 		}
-	} catch (error) {
-		toast.error("Something went wrong");
-	}
-};
+	};
 
 
 	useEffect(() => {
@@ -89,7 +89,9 @@ const EditProfileModal = ({ authUser }) => {
 						}}
 					>
 						<div className='flex flex-col gap-2'>
+							<label htmlFor='fullName'>Full Name</label>
 							<input
+								id='fullName'
 								type='text'
 								placeholder='Full Name'
 								className='input border border-gray-700 rounded p-2 input-md w-full'
@@ -97,7 +99,10 @@ const EditProfileModal = ({ authUser }) => {
 								name='fullName'
 								onChange={handleInputChange}
 							/>
+
+							<label htmlFor='username'>Username</label>
 							<input
+								id='username'
 								type='text'
 								placeholder='Username'
 								className='input border border-gray-700 rounded p-2 input-md w-full'
@@ -108,7 +113,9 @@ const EditProfileModal = ({ authUser }) => {
 						</div>
 
 						<div className='flex flex-col gap-2'>
+							<label htmlFor='bio'>Bio</label>
 							<textarea
+								id='bio'
 								placeholder='Bio'
 								className='input border border-gray-700 rounded p-2 input-md w-full'
 								value={formData.bio}
@@ -118,7 +125,9 @@ const EditProfileModal = ({ authUser }) => {
 						</div>
 
 						<div className='flex flex-col gap-2'>
+							<label htmlFor='currentPassword'>Current Password</label>
 							<input
+								id='currentPassword'
 								type='password'
 								placeholder='Current Password'
 								className='input border border-gray-700 rounded p-2 input-md w-full'
@@ -126,7 +135,10 @@ const EditProfileModal = ({ authUser }) => {
 								name='currentPassword'
 								onChange={handleInputChange}
 							/>
+
+							<label htmlFor='newPassword'>New Password</label>
 							<input
+								id='newPassword'
 								type='password'
 								placeholder='New Password'
 								className='input border border-gray-700 rounded p-2 input-md w-full'
@@ -136,7 +148,9 @@ const EditProfileModal = ({ authUser }) => {
 							/>
 						</div>
 
+						<label htmlFor='link'>Link</label>
 						<input
+							id='link'
 							type='text'
 							placeholder='Link'
 							className='input border border-gray-700 rounded p-2 input-md w-full'
@@ -155,13 +169,14 @@ const EditProfileModal = ({ authUser }) => {
 							type='button'
 							className='btn btn-error rounded-full btn-sm text-white'
 							onClick={() => {
-								document.getElementById("edit_profile_modal").close(); // Close the edit modal
-								setShowDeleteConfirm(true); // Show the confirm delete modal
+								document.getElementById("edit_profile_modal").close();
+								setShowDeleteConfirm(true);
 							}}
 						>
 							Delete My Account
 						</button>
 					</form>
+
 				</div>
 
 				{/* Backdrop for closing the modal */}
