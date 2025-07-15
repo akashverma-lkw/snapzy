@@ -9,7 +9,8 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken"); // ✅ Important fix: Use correct token key
-    navigate("/admin/login"); // smoother redirect using navigate
+    navigate("/"); // smoother redirect using navigate
+    window.location.reload();
   };
 
   const navLinks = [

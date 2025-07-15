@@ -22,15 +22,17 @@ import LoadingSpinner from "./components/common/LoadingSpinner";
 
 // Admin
 import AdminDashboard from "./pages/admin/dashboard/AdminDashboard";
-import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLoginModal from "./pages/admin/AdminLoginModal";
 import ProtectedAdminRoute from "./components/adminProtectRoute/ProtectedAdminRoute";
 import UserList from "./pages/admin/dashboard/UserList";
 import DefaultAdminHome from "./pages/admin/dashboard/DefaultAdminHome";
 import Settings from "./pages/admin/dashboard/Settings";
 
 function App() {
+  
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
 
   const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
@@ -93,7 +95,7 @@ function App() {
           <Route path="/verify-otp" element={<VerifyOtp />} />
 
           {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLoginModal />} />
           <Route
             path="/admin/dashboard"
             element={
@@ -115,6 +117,9 @@ function App() {
         )}
         {isSignupOpen && (
           <SignUpModal isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
+        )}
+        {isModalOpen && (
+          <AdminLoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         )}
       </HelmetProvider>
 

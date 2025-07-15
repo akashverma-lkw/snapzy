@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FaCommentDots,
@@ -6,9 +8,16 @@ import {
   FaRobot,
   FaGamepad,
   FaRegHeart,
+  FaUser,
 } from "react-icons/fa";
+import AdminLoginModal from "../admin/AdminLoginModal";
 
 const features = [
+  {
+    icon: <FaUser className="text-teal-400 text-3xl" />,
+    title: "Secure Login",
+    desc: "Your privacy is our priority with end-to-end encryption.",
+  },
   {
     icon: <FaCommentDots className="text-blue-400 text-3xl" />,
     title: "Post & Comment",
@@ -33,10 +42,14 @@ const features = [
     icon: <FaUserShield className="text-red-400 text-3xl" />,
     title: "Admin Control",
     desc: "Admins maintain peace by removing inappropriate users/posts.",
+    action: "openAdminModal",
   },
 ];
 
 const FrontPage = ({ openLoginModal, openSignupModal }) => {
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+
+  const navigate = useNavigate();
   return (
     <div className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1b2a] to-[#000814] text-white min-h-screen font-sans overflow-x-hidden">
       {/* Notification Bar */}
@@ -119,11 +132,23 @@ const FrontPage = ({ openLoginModal, openSignupModal }) => {
               whileHover={{ scale: 1.05 }}
               className="bg-[#112240] bg-opacity-60 p-6 rounded-2xl shadow-lg transition-all duration-300 backdrop-blur-md"
             >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-400">{feature.desc}</p>
+              <button
+                onClick={() => {
+                  if (feature.action === "openAdminModal") {
+                    setIsAdminModalOpen(true);
+                  } else if (feature.route) {
+                    navigate(feature.route);
+                  }
+                }}
+                className="w-full text-left"
+              >
+                <div className="mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-2 text-center">{feature.title}</h3>
+                <p className="text-gray-400">{feature.desc}</p>
+              </button>
             </motion.div>
           ))}
+
         </div>
       </section>
 
@@ -131,6 +156,8 @@ const FrontPage = ({ openLoginModal, openSignupModal }) => {
       <footer className="bg-[#010409] py-8 text-center text-gray-500 text-sm mt-20">
         Made by Akash Verma · © {new Date().getFullYear()} Snapzy
       </footer>
+      <AdminLoginModal isOpen={isAdminModalOpen} onClose={() => setIsAdminModalOpen(false)}/>
+
     </div>
   );
 };

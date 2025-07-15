@@ -4,22 +4,16 @@ import { IoClose } from "react-icons/io5";
 import { IoMdLogIn } from "react-icons/io";
 import { MdOutlineMail, MdPassword } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
-const LoginModal = ({ isOpen, onClose }) => {
+const AdminLoginModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
@@ -28,43 +22,33 @@ const LoginModal = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-
-  const { mutate: loginMutation, isPending, isError, error } = useMutation({
-
-    mutationFn: async ({ username, password }) => {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
+    try {
+      const res = await fetch(`${API_URL}/api/admin/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Invalid credentials");
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("authUser", JSON.stringify(data.user));
-      return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(["authUser"], data.user); // fixes delay in navigation
-      onClose();
-      navigate("/homepage");
-    },
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    loginMutation(formData);
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+      } else {
+        localStorage.setItem("adminToken", data.token);
+        onClose();
+        navigate("/admin/dashboard");
+      }
+    } catch (err) {
+      setError("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) =>
@@ -86,25 +70,25 @@ const LoginModal = ({ isOpen, onClose }) => {
         </button>
 
         <h2 className="text-3xl font-bold text-center mb-6 text-indigo-400">
-          Welcome Back 👋
+          Admin Portal 👨‍💻
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Username Field */}
+        <form onSubmit={handleLogin} className="space-y-5">
+          {/* Email */}
           <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600 focus-within:ring-2 focus-within:ring-indigo-400">
             <MdOutlineMail className="text-2xl text-indigo-300" />
             <input
-              type="text"
-              name="username"
-              value={formData.username}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              placeholder="Username"
+              placeholder="Admin Email"
               className="w-full bg-transparent outline-none text-white placeholder-gray-300"
               required
             />
           </label>
 
-          {/* Password Field with Eye Icon */}
+          {/* Password */}
           <label className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl border border-gray-600 focus-within:ring-2 focus-within:ring-indigo-400">
             <MdPassword className="text-2xl text-indigo-300" />
             <input
@@ -126,18 +110,20 @@ const LoginModal = ({ isOpen, onClose }) => {
             </button>
           </label>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            disabled={isPending}
+            disabled={loading}
             className="w-full flex justify-center items-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-semibold transition-all shadow-lg disabled:opacity-50"
           >
-            {isPending ? "Logging in..." : "Login"}
+            {loading ? "Logging in..." : "Login"}
             <IoMdLogIn className="text-xl" />
           </button>
 
-          {isError && (
+          {/* Error */}
+          {error && (
             <p className="text-red-500 text-sm text-center mt-2">
-              {error.message}
+              {error}
             </p>
           )}
         </form>
@@ -146,4 +132,4 @@ const LoginModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default LoginModal;
+export default AdminLoginModal;
